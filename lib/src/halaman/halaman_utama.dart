@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../settings/settings_view.dart';
 import 'menu/item_menu.dart';
 import 'sample_item_details_view.dart';
 
-/// Displays a list of SampleItems.
-class HalamanUtama extends StatelessWidget {
-  const HalamanUtama({
-    super.key,
-    this.items = const [
-      ItemMenu("Biodata", 'assets/images/user.png'),
-      ItemMenu("Rencana Studi", 'assets/images/krs.png'),
-      ItemMenu("Hasil Studi", 'assets/images/khs.png'),
-      ItemMenu("Jadwal Kuliah", 'assets/images/calendar.png'),
-      ItemMenu("Biaya Kuliah", 'assets/images/uang.png'),
-      ItemMenu("Berita Kampus", 'assets/images/news.png')
-    ],
-  });
-
+class HalamanUtama extends StatefulWidget {
   static const routeName = '/';
+  @override
+  State<StatefulWidget> createState() {
+    return HalamanUtamaState();
+  }
+}
 
-  final List<ItemMenu> items;
+/// Displays a list of SampleItems.
+class HalamanUtamaState extends State<HalamanUtama> {
+  ListView listSlide = ListView();
+  bool isLoading = true;
+  final List<ItemMenu> items = [
+    ItemMenu("Biodata", 'assets/images/user.png'),
+    ItemMenu("Rencana Studi", 'assets/images/krs.png'),
+    ItemMenu("Hasil Studi", 'assets/images/khs.png'),
+    ItemMenu("Jadwal Kuliah", 'assets/images/calendar.png'),
+    ItemMenu("Biaya Kuliah", 'assets/images/uang.png'),
+    ItemMenu("Berita Kampus", 'assets/images/news.png')
+  ];
+
+  HalamanUtamaState() {
+    getSlide().then((value) => setState(() {
+          listSlide = value;
+          isLoading = false;
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.network('https://app.ibnux.com/gambar/logoitts.jpg',
                   height: 45, width: 45, fit: BoxFit.contain),
-              Column(
+              Expanded(
+                  child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -62,34 +75,30 @@ class HalamanUtama extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ))
             ],
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
-              },
-            ),
-          ],
+          actions: [],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
+        body:
+        Column(
           children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: 15,
-                itemBuilder: (BuildContext context, int index) => Card(
-                  child: Center(child: Text('Dummy Card Text')),
-                ),
-              ),
+            Divider(
+              height: 10,
+            ),
+            SizedBox(
+              height: 220,
+              child: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : listSlide,
+            ),
+            Divider(
+              height: 10,
             ),
             Expanded(
                 child: ListView.builder(
-              shrinkWrap: true,
               restorationId: 'menuUtama',
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
@@ -110,5 +119,26 @@ class HalamanUtama extends StatelessWidget {
             ))
           ],
         ));
+  }
+
+  Future<ListView> getSlide() async {
+    List<dynamic> datas = await fetchAlbum();
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: datas.length,
+      itemBuilder: (BuildContext context, int index) => Card(
+        child: Center(child: Image.network(datas[index], height: 200)),
+      ),
+    );
+  }
+
+  Future<List<dynamic>> fetchAlbum() async {
+    final response = await http.get(Uri.parse(
+        'https://raw.githubusercontent.com/ibnux/itts-uts-siakad/refs/heads/main/data/slide_utama.json'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw jsonDecode('[]');
+    }
   }
 }
