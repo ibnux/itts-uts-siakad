@@ -6,12 +6,13 @@
 | Program Studi  | Teknologi Informasi |
 | Semester | 5 |
 | Kelas | Eksekutif |
+
 | Nama Mahasiswa | Ibnu Maksum |
+|---|---|
 | NIM | 1002230031 |
 
-## Tugas
+## Tugas: Studi Kasus SIAKAD ITTS
 
-Studi Kasus SIAKAD ITTS
 Deskripsi Tugas: Buat aplikasi sederhana untuk menampilkan informasi mahasiswa dalam sistem SIAKAD
 ITTS. Aplikasi ini harus mencakup:
 
