@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:siakad_itts/src/settings/settings_view.dart';
 import 'dart:convert';
 
+import 'package:url_launcher/url_launcher.dart';
+
 import 'menu/item_menu.dart';
-import 'sample_item_details_view.dart';
 
 class HalamanUtama extends StatefulWidget {
   static const routeName = '/home';
@@ -37,6 +39,14 @@ class HalamanUtamaState extends State<HalamanUtama> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.restorablePushNamed(context, SettingsView.routeName);
+            },
+          ),
+        ],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -77,7 +87,6 @@ class HalamanUtamaState extends State<HalamanUtama> {
               ))
             ],
           ),
-          actions: [],
         ),
         body:
         Column(
@@ -126,7 +135,13 @@ class HalamanUtamaState extends State<HalamanUtama> {
       scrollDirection: Axis.horizontal,
       itemCount: datas.length,
       itemBuilder: (BuildContext context, int index) => Card(
-        child: Center(child: Image.network(datas[index], height: 200)),
+        child: InkWell(
+          onTap: () async {
+            final Uri url = Uri.parse(datas[index]);
+            await launchUrl(url);
+          },
+          child: Image.network(datas[index], height: 200)
+          ),
       ),
     );
   }

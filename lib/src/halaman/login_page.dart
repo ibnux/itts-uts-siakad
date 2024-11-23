@@ -5,8 +5,6 @@ import 'package:siakad_itts/src/halaman/halaman_utama.dart';
 
 class LoginPage extends StatelessWidget {
   static const String routeName = '/login';
-  final userCont = TextEditingController();
-  final passCont = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,7 @@ class LoginPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: TextFormField(
-              controller: userCont,
+              initialValue: "1002230031",
               keyboardType: TextInputType.phone,
               decoration:
                   InputDecoration(icon: Icon(Icons.person), labelText: 'NIM'),
@@ -56,7 +54,7 @@ class LoginPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: TextFormField(
-              controller: passCont,
+              initialValue: "1002230031",
               obscureText: true,
               decoration: InputDecoration(
                   icon: Icon(Icons.lock), labelText: 'Password'),
