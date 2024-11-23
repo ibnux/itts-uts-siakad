@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../settings/settings_view.dart';
 import 'menu/item_menu.dart';
 import 'sample_item_details_view.dart';
 
 class HalamanUtama extends StatefulWidget {
-  static const routeName = '/';
+  static const routeName = '/home';
   @override
   State<StatefulWidget> createState() {
     return HalamanUtamaState();
@@ -19,12 +18,12 @@ class HalamanUtamaState extends State<HalamanUtama> {
   ListView listSlide = ListView();
   bool isLoading = true;
   final List<ItemMenu> items = [
-    ItemMenu("Biodata", 'assets/images/user.png'),
-    ItemMenu("Rencana Studi", 'assets/images/krs.png'),
-    ItemMenu("Hasil Studi", 'assets/images/khs.png'),
-    ItemMenu("Jadwal Kuliah", 'assets/images/calendar.png'),
-    ItemMenu("Biaya Kuliah", 'assets/images/uang.png'),
-    ItemMenu("Berita Kampus", 'assets/images/news.png')
+    ItemMenu("Biodata", 'assets/images/user.png', "/biodata"),
+    ItemMenu("Rencana Studi", 'assets/images/krs.png', "/krs"),
+    ItemMenu("Hasil Studi", 'assets/images/khs.png', "/khs"),
+    ItemMenu("Jadwal Kuliah", 'assets/images/calendar.png', "/jadwal"),
+    ItemMenu("Biaya Kuliah", 'assets/images/uang.png', "/biaya"),
+    ItemMenu("Berita Kampus", 'assets/images/news.png', "/berita")
   ];
 
   HalamanUtamaState() {
@@ -112,7 +111,7 @@ class HalamanUtamaState extends State<HalamanUtama> {
                     onTap: () {
                       Navigator.restorablePushNamed(
                         context,
-                        SampleItemDetailsView.routeName,
+                        item.route,
                       );
                     });
               },

@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:siakad_itts/src/halaman/biodata.dart';
+import 'package:siakad_itts/src/halaman/login_page.dart';
 
 import 'halaman/sample_item_details_view.dart';
 import 'halaman/halaman_utama.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'halaman/splash.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.settingsController,
   });
 
-  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +21,7 @@ class MyApp extends StatelessWidget {
     //
     // The ListenableBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
-    return ListenableBuilder(
-      listenable: settingsController,
-      builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
+    return MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -58,7 +54,6 @@ class MyApp extends StatelessWidget {
           // SettingsController to display the correct theme.
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
@@ -67,19 +62,20 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
-                  case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
                   case SampleItemDetailsView.routeName:
                     return SampleItemDetailsView();
                   case HalamanUtama.routeName:
-                  default:
                     return HalamanUtama();
+                  case LoginPage.routeName:
+                    return LoginPage();
+                  case Biodata.routeName:
+                    return Biodata();
+                  default:
+                    return Splash();
                 }
               },
             );
           },
         );
-      },
-    );
   }
 }
